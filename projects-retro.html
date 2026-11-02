@@ -27,11 +27,15 @@
 
       main { position:relative; z-index:1; padding:140px 28px 120px; }
 
-      .bg-marquee { position:fixed; inset:0; z-index:0; display:flex; flex-direction:column; justify-content:space-evenly; overflow:hidden; pointer-events:none; }
-      .bg-marquee-row { display:flex; width:max-content; white-space:nowrap; animation:bg-marquee-scroll 26s linear infinite; }
-      .bg-marquee-row.reverse { animation-direction:reverse; }
-      .bg-marquee-row span { display:inline-block; font:800 clamp(50px,10vw,150px)/1 Anton,Impact,sans-serif; letter-spacing:-.02em; text-transform:uppercase; color:rgba(253,246,231,.12); padding-right:.5em; }
-      @keyframes bg-marquee-scroll { from { transform:translate3d(0,0,0); } to { transform:translate3d(-50%,0,0); } }
+      .line-field { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+      .line-field svg { position:absolute; width:220vmax; height:220vmax; left:50%; top:50%; transform:translate(-50%,-50%); opacity:.32; }
+      .line-field path { fill:none; stroke:#f3e8cc; stroke-width:1.3; stroke-linecap:round; stroke-dasharray:26 18; }
+      .line-field .set-a { animation:line-drift-a 70s linear infinite; }
+      .line-field .set-b { animation:line-drift-b 90s linear infinite; opacity:.75; }
+      @keyframes line-drift-a { from { transform:translate(-50%,-50%) rotate(0deg); } to { transform:translate(-50%,-50%) rotate(360deg); } }
+      @keyframes line-drift-b { from { transform:translate(-50%,-50%) rotate(360deg); } to { transform:translate(-50%,-50%) rotate(0deg); } }
+      @keyframes line-flow { to { stroke-dashoffset:-440; } }
+      @media (prefers-reduced-motion:reduce) { .line-field .set-a, .line-field .set-b, .line-field path { animation:none; } }
       .intro h1 { margin:0; font:clamp(64px,13vw,180px)/.78 Anton,Impact,sans-serif; letter-spacing:-.05em; text-transform:uppercase; color:var(--cream); opacity:0; animation:fade-up .8s cubic-bezier(.16,1,.3,1) .1s forwards; }
       .intro p { max-width:520px; margin:22px 0 0; font-size:clamp(15px,1.6vw,19px); line-height:1.5; color:var(--cream); opacity:0; animation:fade-up .7s cubic-bezier(.16,1,.3,1) .25s forwards; }
 
@@ -238,8 +242,6 @@
     </style>
   <script src="https://unpkg.com/lenis@1/dist/lenis.min.js"></script>
     <style>
-      .bg-marquee-row span { color:#ffc926; text-shadow:4px 4px 0 #191919; }
-      .bg-marquee-row.reverse span { color:#2457a6; text-shadow:4px 4px 0 #191919; }
       .intro h1 { color:#f3e8cc; text-shadow:8px 8px 0 #191919; }
       .intro p { color:#f3e8cc; }
       .proj-card:nth-child(3) .frame { background:#ffc926; }
@@ -264,10 +266,20 @@
     </style>
   </head>
   <body>
-    <div class="bg-marquee" aria-hidden="true">
-      <div class="bg-marquee-row"><span>Project Garage ✕ Welcome ✕</span><span>Project Garage ✕ Welcome ✕</span></div>
-      <div class="bg-marquee-row reverse"><span>Project Garage ✕ Welcome ✕</span><span>Project Garage ✕ Welcome ✕</span></div>
-      <div class="bg-marquee-row"><span>Project Garage ✕ Welcome ✕</span><span>Project Garage ✕ Welcome ✕</span></div>
+    <div class="line-field" aria-hidden="true">
+      <svg class="set-a" viewBox="0 0 800 800">
+        <path d="M-20 80 Q160 -40 340 80 T700 60" style="animation:line-flow 4.2s linear infinite"/>
+        <path d="M-40 260 Q160 120 380 260 T780 220" style="animation:line-flow 3.4s linear infinite reverse"/>
+        <path d="M-20 440 Q220 320 420 440 T760 400" style="animation:line-flow 5s linear infinite"/>
+        <path d="M-40 620 Q200 500 400 620 T780 580" style="animation:line-flow 3.8s linear infinite reverse"/>
+        <path d="M-20 780 Q220 660 420 780 T760 740" style="animation:line-flow 4.6s linear infinite"/>
+      </svg>
+      <svg class="set-b" viewBox="0 0 800 800">
+        <path d="M-40 160 Q240 60 460 220 T800 180" style="animation:line-flow 3.6s linear infinite reverse"/>
+        <path d="M-20 360 Q260 460 480 340 T820 380" style="animation:line-flow 4.8s linear infinite"/>
+        <path d="M-40 560 Q220 660 440 520 T800 560" style="animation:line-flow 3.2s linear infinite reverse"/>
+        <path d="M-20 740 Q260 820 480 700 T820 740" style="animation:line-flow 4.4s linear infinite"/>
+      </svg>
     </div>
     <div class="page-loader" aria-hidden="true">
       <div class="loader-bars">
