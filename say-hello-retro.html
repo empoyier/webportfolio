@@ -1,0 +1,184 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Say Hello - Gabriel Dalusong</title>
+    <link rel="icon" type="image/png" href="cropped_circle_image.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      :root { --red:#ff1f1e; --cream:#fdf6e7; --ink:#162119; }
+      html { scrollbar-width:none; -ms-overflow-style:none; }
+      html::-webkit-scrollbar { display:none; }
+      * { box-sizing:border-box; }
+      ::selection { color:var(--red); background:var(--cream); }
+      body { min-height:100vh; margin:0; color:var(--cream); background:var(--red); font-family:Manrope,Arial,sans-serif; overflow-x:hidden; }
+      a { color:inherit; text-decoration:none; }
+      .site-header { position:fixed; z-index:20; top:0; left:0; width:100%; padding:16px 28px; display:flex; justify-content:space-between; align-items:center; }
+      .wordmark { font:30px/.76 Anton,Impact,sans-serif; letter-spacing:-.04em; text-transform:uppercase; width:73px; }
+      .wordmark span { display:block; }
+      .menu .contact { width:70px; height:70px; display:grid; place-items:center; background:var(--cream); border:4px solid var(--ink); border-radius:0; color:var(--ink); transition:background .3s ease, border-color .3s ease, color .3s ease; }
+      .menu .contact::before { content:"âœ•"; font:36px/.8 Anton,Impact,sans-serif; display:inline-block; animation:contact-x-wiggle 2.4s ease-in-out infinite; transition:transform .4s cubic-bezier(.16,1,.3,1); }
+      @keyframes contact-x-wiggle { 0%,100% { transform:rotate(-8deg); } 50% { transform:rotate(8deg); } }
+      .menu .contact:hover::before { animation-play-state:paused; transform:rotate(180deg) scale(1.15); }
+      .menu .contact:hover { background:var(--ink); border-color:var(--cream); color:var(--cream); }
+
+      /* centered nav block */
+      .center-nav-wrap { position:fixed; z-index:2; top:50%; left:50%; transform:translate(-50%,-50%); display:flex; flex-direction:column; align-items:center; gap:34px; text-align:center; }
+      .center-nav { display:flex; flex-direction:column; align-items:center; gap:8px; }
+      .center-nav a { position:relative; font-family:Anton,Impact,sans-serif; font-size:clamp(56px,10vw,150px); line-height:.92; letter-spacing:-.03em; text-transform:uppercase; color:var(--cream); cursor:pointer; transition:color .25s, transform .25s; }
+      .center-nav a:hover { color:var(--ink); transform:scale(1.04); }
+      .center-nav a.current { color:var(--ink); }
+      @media (max-width:700px) { .center-nav a { font-size:clamp(34px,13vw,80px); } .center-nav { gap:2px; } .center-nav-wrap { gap:20px; } }
+
+      /* bottom enquiries bar */
+      .enquiries { position:fixed; z-index:15; left:0; right:0; bottom:28px; display:flex; flex-direction:column; align-items:center; gap:10px; }
+      .enquiries nav { display:flex; gap:26px; flex-wrap:wrap; justify-content:center; }
+      .enquiries a { font:700 12px/1 Manrope,Arial,sans-serif; letter-spacing:.06em; text-transform:uppercase; transition:color .3s ease; }
+      .enquiries a:hover { color:var(--ink); }
+      @media (max-width:600px) { .enquiries { bottom:16px; } .enquiries nav { gap:16px; } }
+
+      /* background line-drift animation */
+      .line-field { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+      .line-field svg { position:absolute; width:220vmax; height:220vmax; left:50%; top:50%; transform:translate(-50%,-50%); opacity:.32; }
+      .line-field path { fill:none; stroke:var(--cream); stroke-width:1.3; stroke-linecap:round; stroke-dasharray:26 18; }
+      .line-field .set-a { animation:line-drift-a 70s linear infinite; }
+      .line-field .set-b { animation:line-drift-b 90s linear infinite; opacity:.75; }
+      @keyframes line-drift-a { from { transform:translate(-50%,-50%) rotate(0deg); } to { transform:translate(-50%,-50%) rotate(360deg); } }
+      @keyframes line-drift-b { from { transform:translate(-50%,-50%) rotate(360deg); } to { transform:translate(-50%,-50%) rotate(0deg); } }
+      @keyframes line-flow { to { stroke-dashoffset:-440; } }
+      @media (prefers-reduced-motion:reduce) { .line-field .set-a, .line-field .set-b, .line-field path { animation:none; } }
+
+      /* entrance animation */
+      @keyframes fade-in { from { opacity:0; } to { opacity:1; } }
+      .center-nav a { opacity:0; animation:fade-in .6s ease forwards; }
+      .center-nav a:nth-child(1) { animation-delay:.3s; }
+      .center-nav a:nth-child(2) { animation-delay:.4s; }
+      .center-nav a:nth-child(3) { animation-delay:.5s; }
+      .center-nav a:nth-child(4) { animation-delay:.6s; }
+      .enquiries { opacity:0; animation:fade-in .7s ease .85s forwards; }
+      .page-loader { position:fixed; inset:0; z-index:9999; pointer-events:none; }
+      .loader-bars { position:absolute; inset:0; display:flex; }
+      .loader-bars .bar { flex:1 1 20%; background:var(--cream); transform:translateY(0); transition:transform .8s cubic-bezier(.7,0,.3,1); }
+      .loader-bars .bar:nth-child(1) { transition-delay:0s; }
+      .loader-bars .bar:nth-child(2) { transition-delay:.07s; }
+      .loader-bars .bar:nth-child(3) { transition-delay:.14s; }
+      .loader-bars .bar:nth-child(4) { transition-delay:.21s; }
+      .loader-bars .bar:nth-child(5) { transition-delay:.28s; }
+      .page-loader.is-open .loader-bars .bar { transform:translateY(-102%); }
+      .loader-content { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px; opacity:1; transition:opacity .35s ease; }
+      .page-loader.is-open .loader-content { opacity:0; }
+      .start-lights { display:flex; gap:16px; }
+      .start-lights i { width:22px; height:22px; border-radius:50%; background:rgba(255,31,30,.16); border:2px solid rgba(255,31,30,.45); display:block; }
+      .start-lights i:nth-child(1) { animation:light-1 2.4s ease-in-out infinite; }
+      .start-lights i:nth-child(2) { animation:light-2 2.4s ease-in-out infinite; }
+      .start-lights i:nth-child(3) { animation:light-3 2.4s ease-in-out infinite; }
+      .start-lights i:nth-child(4) { animation:light-4 2.4s ease-in-out infinite; }
+      .start-lights i:nth-child(5) { animation:light-5 2.4s ease-in-out infinite; }
+      @keyframes light-1 { 0%,4% { background:rgba(255,31,30,.16); box-shadow:none; } 8%,75% { background:var(--red); box-shadow:0 0 16px 3px rgba(255,31,30,.75); } 79%,100% { background:rgba(255,31,30,.16); box-shadow:none; } }
+      @keyframes light-2 { 0%,17% { background:rgba(255,31,30,.16); box-shadow:none; } 21%,75% { background:var(--red); box-shadow:0 0 16px 3px rgba(255,31,30,.75); } 79%,100% { background:rgba(255,31,30,.16); box-shadow:none; } }
+      @keyframes light-3 { 0%,29% { background:rgba(255,31,30,.16); box-shadow:none; } 33%,75% { background:var(--red); box-shadow:0 0 16px 3px rgba(255,31,30,.75); } 79%,100% { background:rgba(255,31,30,.16); box-shadow:none; } }
+      @keyframes light-4 { 0%,42% { background:rgba(255,31,30,.16); box-shadow:none; } 46%,75% { background:var(--red); box-shadow:0 0 16px 3px rgba(255,31,30,.75); } 79%,100% { background:rgba(255,31,30,.16); box-shadow:none; } }
+      @keyframes light-5 { 0%,54% { background:rgba(255,31,30,.16); box-shadow:none; } 58%,75% { background:var(--red); box-shadow:0 0 16px 3px rgba(255,31,30,.75); } 79%,100% { background:rgba(255,31,30,.16); box-shadow:none; } }
+      @media (prefers-reduced-motion:reduce) { .loader-bars .bar { transition-duration:.25s; } .start-lights i { animation:none !important; background:var(--red); } }
+    </style>
+    <style>
+      body { background:#ffc926; color:#191919; background-image:radial-gradient(rgba(25,25,25,.1) .7px,transparent .7px); background-size:5px 5px; }
+      .site-header { color:#191919; }
+      .contact, button, input, textarea { border:3px solid #191919 !important; box-shadow:4px 4px 0 #191919; }
+      button, .contact { background:#d52518; color:#f3e8cc; }
+      button:hover, .contact:hover { background:#ffc926; color:#191919; }
+      a:hover { color:#d52518; }
+      .say-marquee-row span { color:#d52518; text-shadow:3px 3px 0 #f3e8cc; }
+      .say-marquee-row:nth-child(2) span { color:#2457a6; }
+      main { background:#f3e8cc; color:#191919; border:4px solid #191919; border-radius:28px; box-shadow:9px 9px 0 #191919; }
+      main h1 { color:#ffc926; text-shadow:5px 5px 0 #191919; }
+      main h1 a { color:#f96015; }
+        .wordmark, .center-nav a { font-family:Anton,Impact,sans-serif; letter-spacing:.02em; }
+        .center-nav a { text-shadow:5px 5px 0 #191919; }
+        .center-nav a:nth-child(1) { color:#d52518; }
+        .center-nav a:nth-child(2) { color:#2457a6; }
+        .center-nav a:nth-child(3) { color:#18542a; }
+        .center-nav a:nth-child(4) { color:#f96015; }
+        .center-nav a.current { color:#f96015; }
+      .links a { background:#ffc926; color:#191919; border:3px solid #191919; box-shadow:4px 4px 0 #191919; }
+      .links a:nth-child(2) { background:#f96015; }
+      .links a:nth-child(3) { background:#2457a6; color:#f3e8cc; }
+      .links a:nth-child(4) { background:#9abc05; }
+        .enquiries a { font-family:"DM Mono",monospace; font-weight:700; letter-spacing:.1em; }
+    </style>
+    </style>
+  </head>
+  <body>
+    <div class="page-loader" aria-hidden="true">
+      <div class="loader-bars">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </div>
+      <div class="loader-content">
+        <div class="start-lights"><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+    <div class="line-field" aria-hidden="true">
+      <svg class="set-a" viewBox="0 0 800 800">
+        <path d="M-20 80 Q160 -40 340 80 T700 60" style="animation:line-flow 4.2s linear infinite"/>
+        <path d="M-40 260 Q160 120 380 260 T780 220" style="animation:line-flow 3.4s linear infinite reverse"/>
+        <path d="M-20 440 Q220 320 420 440 T760 400" style="animation:line-flow 5s linear infinite"/>
+        <path d="M-40 620 Q200 500 400 620 T780 580" style="animation:line-flow 3.8s linear infinite reverse"/>
+        <path d="M-20 780 Q220 660 420 780 T760 740" style="animation:line-flow 4.6s linear infinite"/>
+      </svg>
+      <svg class="set-b" viewBox="0 0 800 800">
+        <path d="M-40 160 Q240 60 460 220 T800 180" style="animation:line-flow 3.6s linear infinite reverse"/>
+        <path d="M-20 360 Q260 460 480 340 T820 380" style="animation:line-flow 4.8s linear infinite"/>
+        <path d="M-40 560 Q220 660 440 520 T800 560" style="animation:line-flow 3.2s linear infinite reverse"/>
+        <path d="M-20 740 Q260 820 480 700 T820 740" style="animation:line-flow 4.4s linear infinite"/>
+      </svg>
+    </div>
+    <header class="site-header">
+      <a class="wordmark" href="home-retro.html"><span>Gabriel</span><span>Dalusong</span></a>
+      <nav class="menu"><a class="contact" href="home-retro.html" aria-label="Say hello"></a></nav>
+    </header>
+    <div class="center-nav-wrap">
+      <nav class="center-nav" aria-label="Primary">
+        <a href="home-retro.html">Home</a>
+        <a href="projects-retro.html">Projects</a>
+        <a href="personal-retro.html">Off track</a>
+        <a href="contacts-retro.html" class="current">Contact me</a>
+      </nav>
+    </div>
+    <div class="enquiries">
+      <nav>
+        <a href="mailto:gabrieldalusong22@gmail.com">Gmail</a>
+        <a href="tel:+639662253692">Phone</a>
+        <a href="https://www.linkedin.com/in/gabriel-dalusong-406850300/" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="https://www.facebook.com/empoyier" target="_blank" rel="noreferrer">Facebook</a>
+        <a href="https://www.instagram.com/empoyier" target="_blank" rel="noreferrer">Instagram</a>
+      </nav>
+    </div>
+  <script>
+    (function () {
+      const loader = document.querySelector('.page-loader');
+      if (!loader) return;
+      const reveal = () => loader.classList.add('is-open');
+      if (document.readyState === 'complete') {
+        requestAnimationFrame(reveal);
+      } else {
+        window.addEventListener('load', reveal);
+      }
+      document.addEventListener('click', (event) => {
+        const link = event.target.closest('a[href]');
+        if (!link) return;
+        const href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || link.target === '_blank' || link.hasAttribute('download')) return;
+        let url;
+        try { url = new URL(href, window.location.href); } catch (e) { return; }
+        if (url.origin !== window.location.origin) return;
+        event.preventDefault();
+        loader.classList.remove('is-open');
+        setTimeout(() => { window.location.href = url.href; }, 1000);
+      });
+    })();
+  </script>
+  </body>
+</html>

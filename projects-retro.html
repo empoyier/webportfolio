@@ -1,0 +1,595 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Garage - Gabriel Dalusong</title>
+    <link rel="icon" type="image/png" href="cropped_circle_image.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      :root { --cream:#fdf6e7; --ink:#fdf6e7; --red:#e21b23; --pistachio:#ffe4e4; }
+      html { scrollbar-width:none; -ms-overflow-style:none; }
+      html::-webkit-scrollbar { display:none; }
+      * { box-sizing:border-box; }
+      body { min-height:100vh; margin:0; color:var(--cream); background:var(--red); font-family:Manrope,Arial,sans-serif; overflow-x:hidden; }
+      a { color:inherit; text-decoration:none; }
+      ::selection { color:var(--cream); background:var(--red); }
+
+      .site-header { position:fixed; z-index:20; top:0; left:0; width:100%; padding:16px 28px; display:flex; justify-content:space-between; align-items:center; color:var(--cream); background:transparent; }
+      .wordmark { font:30px/.76 Anton,Impact,sans-serif; letter-spacing:-.04em; text-transform:uppercase; width:73px; }
+      .wordmark span { display:block; }
+      .menu .contact { width:70px; height:70px; display:grid; place-items:center; background:var(--cream); border:4px solid var(--red); border-radius:0; color:var(--red); transition:background .25s ease,color .25s ease,border-color .25s ease; }
+      .menu .contact::before { content:"â†—"; font:48px/.8 Anton,Impact,sans-serif; animation:contact-arrow-nudge 1.6s ease-in-out infinite alternate; }
+      @keyframes contact-arrow-nudge { from { transform:translate(0,0); } to { transform:translate(5px,-5px); } }
+      .menu .contact:hover { background:var(--red); border-color:var(--cream); color:var(--cream); }
+
+      main { position:relative; z-index:1; padding:140px 28px 120px; }
+
+      .bg-marquee { position:fixed; inset:0; z-index:0; display:flex; flex-direction:column; justify-content:space-evenly; overflow:hidden; pointer-events:none; }
+      .bg-marquee-row { display:flex; width:max-content; white-space:nowrap; animation:bg-marquee-scroll 26s linear infinite; }
+      .bg-marquee-row.reverse { animation-direction:reverse; }
+      .bg-marquee-row span { display:inline-block; font:800 clamp(50px,10vw,150px)/1 Anton,Impact,sans-serif; letter-spacing:-.02em; text-transform:uppercase; color:rgba(253,246,231,.12); padding-right:.5em; }
+      @keyframes bg-marquee-scroll { from { transform:translate3d(0,0,0); } to { transform:translate3d(-50%,0,0); } }
+      .intro h1 { margin:0; font:clamp(64px,13vw,180px)/.78 Anton,Impact,sans-serif; letter-spacing:-.05em; text-transform:uppercase; color:var(--cream); opacity:0; animation:fade-up .8s cubic-bezier(.16,1,.3,1) .1s forwards; }
+      .intro p { max-width:520px; margin:22px 0 0; font-size:clamp(15px,1.6vw,19px); line-height:1.5; color:var(--cream); opacity:0; animation:fade-up .7s cubic-bezier(.16,1,.3,1) .25s forwards; }
+
+      .section-label { display:flex; justify-content:space-between; align-items:baseline; margin:120px 0 60px; font:700 12px/1 "DM Mono",monospace; letter-spacing:.08em; text-transform:uppercase; color:var(--cream); opacity:.9; }
+      .section-label.scroll-reveal {
+        opacity:0;
+        transform:translate3d(0,40px,0);
+        transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)
+      }
+      .section-label.scroll-reveal.is-visible {
+        opacity:.75;
+        transform:translate3d(0,0,0)
+      }
+
+      .project-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); column-gap:64px; row-gap:0; }
+      .proj-card {
+        position:relative;
+        cursor:pointer;
+        margin-bottom:150px
+      }
+      .proj-card.scroll-reveal {
+        opacity:0;
+        transform:translate3d(0,60px,0) scale(.96);
+        filter:blur(6px);
+        transition:opacity 1.1s cubic-bezier(.16,1,.3,1),transform 1.1s cubic-bezier(.16,1,.3,1),filter 1.1s cubic-bezier(.16,1,.3,1);
+        will-change:opacity,transform,filter
+      }
+      .proj-card.scroll-reveal[data-reveal-direction="up"] {
+        transform:translate3d(0,-60px,0) scale(.96)
+      }
+      .proj-card.scroll-reveal.is-visible {
+        opacity:1;
+        transform:translate3d(0,0,0) scale(1);
+        filter:blur(0)
+      }
+      .proj-card:nth-child(even).scroll-reveal { transition-delay:.1s; }
+      .proj-card:nth-child(even) { margin-top:180px; }
+      .proj-card:nth-child(even) .frame { margin-left:auto; }
+      .proj-card .frame {
+        position:relative;
+        overflow:hidden;
+        background:var(--cream);
+        border:1px solid rgba(253,246,231,.35);
+        clip-path:polygon(0 0,16% 0,21% 4.5%,100% 4.5%,100% 100%,0 100%);
+        max-width:100%;
+      }
+      .proj-card img {
+        width:100%;
+        height:100%;
+        display:block;
+        object-fit:cover;
+        transform:scale(1.001);
+        transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .4s ease
+      }
+      .proj-card:hover img { transform:scale(1.045); }
+      .proj-card .frame { aspect-ratio:1.2; }
+      .proj-card .frame .fallback-label {
+        position:absolute;
+        inset:0;
+        display:none;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        padding:20px;
+        font:800 clamp(18px,2.2vw,26px)/1.15 Anton,Impact,sans-serif;
+        text-transform:uppercase;
+        color:var(--red);
+        opacity:.8;
+      }
+      .proj-card .frame.img-missing img { display:none; }
+      .proj-card .frame.img-missing .fallback-label { display:flex; }
+      .proj-card .plaque {
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        gap:18px;
+        margin-top:22px;
+        padding-top:16px;
+        border-top:1px solid rgba(253,246,231,.35)
+      }
+      .proj-card .plaque-left { min-width:0; }
+      .proj-card .num { display:block; font:700 11px/1 "DM Mono",monospace; letter-spacing:.1em; color:var(--cream); margin-bottom:8px; }
+      .proj-card h3 { margin:0; font:clamp(24px,2.4vw,34px)/1 Anton,Impact,sans-serif; letter-spacing:-.02em; text-transform:uppercase; color:var(--cream); }
+      .proj-card .blurb { margin:8px 0 0; max-width:340px; font-size:13px; line-height:1.5; color:rgba(255,255,255,.8); }
+      .proj-card .tag { flex:0 0 auto; font:700 10px/1 "DM Mono",monospace; letter-spacing:.1em; text-transform:uppercase; color:var(--cream); opacity:.8; white-space:nowrap; padding-top:2px; }
+
+      @keyframes fade-up { from { opacity:0; transform:translate3d(0,30px,0); } to { opacity:1; transform:translate3d(0,0,0); } }
+
+      .modal { position:fixed; z-index:40; inset:0; display:none; place-items:center; background:rgba(0,0,0,.8); padding:12px; }
+      .modal.active { display:grid; }
+      .modal-card { position:relative; width:min(1100px,100%); max-height:94vh; padding:40px; overflow:auto; scrollbar-width:none; -ms-overflow-style:none; color:var(--red); background:var(--ink); border:1px solid rgba(226,27,35,.2); border-radius:3px; }
+      .modal-card::-webkit-scrollbar { display:none; }
+      .modal-card h2 { margin:0 0 14px; font:clamp(46px,8vw,100px)/.8 Anton,Impact,sans-serif; text-transform:uppercase; color:var(--red); }
+      .modal-card p { max-width:580px; line-height:1.6; }
+      .modal-card img { width:100%; max-height:440px; object-fit:cover; margin-top:18px; }
+      .slideshow { margin-top:18px; }
+      .slide-frame { position:relative; width:100%; display:flex; align-items:center; justify-content:center; background:var(--cream); border:0; overflow:hidden; }
+      .slide-frame img { width:100%; height:auto; max-height:none; object-fit:contain; display:block; }
+      .slide-overlay { position:absolute; inset:0 0 0 auto; width:min(48%,420px); display:flex; align-items:center; padding:32px 34px; background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.88) 38%,rgba(0,0,0,.97)); pointer-events:none; }
+      .slide-copy { max-width:330px; margin-left:auto; margin-right:48px; }
+      .slide-copy h3 { margin:0 0 10px; font:clamp(24px,3vw,38px)/.95 Anton,Impact,sans-serif; text-transform:uppercase; color:var(--cream); }
+      .slide-copy p { margin:0; font-size:14px; line-height:1.55; color:var(--cream); }
+      .slide-nav { position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; display:grid; place-items:center; background:rgba(226,27,35,.82); border:1px solid rgba(253,246,231,.65); color:var(--cream); font-size:22px; cursor:pointer; transition:background .2s ease; }
+      .slide-nav:hover { background:#b51219; }
+      .slide-nav.prev { left:12px; }
+      .slide-nav.next { right:12px; }
+      .slide-meta { display:flex; justify-content:space-between; align-items:baseline; margin-top:12px; font:600 13px/1 Manrope,Arial,sans-serif; color:var(--red); opacity:.8; }
+      .slide-meta #slide-counter { font:700 11px/1 "DM Mono",monospace; opacity:.6; }
+      .slide-dots { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+      .slide-dots button { width:9px; height:9px; border-radius:50%; border:1px solid var(--red); background:none; padding:0; cursor:pointer; }
+      .slide-dots button.active { background:var(--red); }
+      .close { position:absolute; top:15px; right:17px; background:none; border:0; color:var(--red); font:500 11px "DM Mono",monospace; cursor:pointer; }
+
+      .page-loader { position:fixed; inset:0; z-index:9999; pointer-events:none; }
+      .loader-bars { position:absolute; inset:0; display:flex; }
+      .loader-bars .bar { flex:1 1 20%; background:var(--cream); transform:translateY(0); transition:transform .8s cubic-bezier(.7,0,.3,1); }
+      .loader-bars .bar:nth-child(1) { transition-delay:0s; }
+      .loader-bars .bar:nth-child(2) { transition-delay:.07s; }
+      .loader-bars .bar:nth-child(3) { transition-delay:.14s; }
+      .loader-bars .bar:nth-child(4) { transition-delay:.21s; }
+      .loader-bars .bar:nth-child(5) { transition-delay:.28s; }
+      .page-loader.is-open .loader-bars .bar { transform:translateY(-102%); }
+      .loader-content { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px; opacity:1; transition:opacity .35s ease; }
+      .page-loader.is-open .loader-content { opacity:0; }
+      .start-lights { display:flex; gap:16px; }
+      .start-lights i { width:22px; height:22px; border-radius:50%; background:rgba(253,246,231,.16); border:2px solid rgba(253,246,231,.45); display:block; }
+      .start-lights i:nth-child(1) { animation:light-1 2.4s ease-in-out infinite; }
+      .start-lights i:nth-child(2) { animation:light-2 2.4s ease-in-out infinite; }
+      .start-lights i:nth-child(3) { animation:light-3 2.4s ease-in-out infinite; }
+      .start-lights i:nth-child(4) { animation:light-4 2.4s ease-in-out infinite; }
+      .start-lights i:nth-child(5) { animation:light-5 2.4s ease-in-out infinite; }
+      @keyframes light-1 { 0%,4% { background:rgba(253,246,231,.16); box-shadow:none; } 8%,75% { background:var(--cream); box-shadow:0 0 16px 3px rgba(253,246,231,.55); } 79%,100% { background:rgba(253,246,231,.16); box-shadow:none; } }
+      @keyframes light-2 { 0%,17% { background:rgba(253,246,231,.16); box-shadow:none; } 21%,75% { background:var(--cream); box-shadow:0 0 16px 3px rgba(253,246,231,.55); } 79%,100% { background:rgba(253,246,231,.16); box-shadow:none; } }
+      @keyframes light-3 { 0%,29% { background:rgba(253,246,231,.16); box-shadow:none; } 33%,75% { background:var(--cream); box-shadow:0 0 16px 3px rgba(253,246,231,.55); } 79%,100% { background:rgba(253,246,231,.16); box-shadow:none; } }
+      @keyframes light-4 { 0%,42% { background:rgba(253,246,231,.16); box-shadow:none; } 46%,75% { background:var(--cream); box-shadow:0 0 16px 3px rgba(253,246,231,.55); } 79%,100% { background:rgba(253,246,231,.16); box-shadow:none; } }
+      @keyframes light-5 { 0%,54% { background:rgba(253,246,231,.16); box-shadow:none; } 58%,75% { background:var(--cream); box-shadow:0 0 16px 3px rgba(253,246,231,.55); } 79%,100% { background:rgba(253,246,231,.16); box-shadow:none; } }
+      @media (prefers-reduced-motion:reduce) { .loader-bars .bar { transition-duration:.25s; } .start-lights i { animation:none !important; background:var(--cream); } }
+
+      @media (max-width:900px) {
+        .project-grid { grid-template-columns:1fr; column-gap:0; }
+        .proj-card:nth-child(even) { margin-top:0; }
+        .proj-card { margin-bottom:90px; }
+      }
+      @media (max-width:600px) {
+        main { padding:100px 18px 80px; }
+        .section-label { margin:70px 0 40px; }
+        .modal-card { padding:32px 24px; }
+        .slide-nav.prev { left:12px; }
+        .slide-nav.next { right:12px; }
+        .slide-overlay { inset:auto 0 0; width:100%; padding:72px 20px 20px; background:linear-gradient(0deg,rgba(0,0,0,.97),rgba(0,0,0,0)); }
+        .slide-copy { max-width:100%; margin-right:44px; }
+      }
+      .site-footer {
+        position:relative;
+        z-index:1;
+        margin-top:60px;
+        padding:28px 28px 34px;
+        border-top:1px solid rgba(253,246,231,.35);
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:space-between;
+        align-items:center;
+        gap:14px;
+      }
+      .site-footer p {
+        margin:0;
+        font:600 11px/1 "DM Mono",monospace;
+        letter-spacing:.08em;
+        text-transform:uppercase;
+        color:var(--cream);
+        opacity:.6;
+      }
+      .site-footer nav {
+        display:flex;
+        gap:22px;
+      }
+      .site-footer a {
+        font:700 12px/1 Manrope,Arial,sans-serif;
+        letter-spacing:.03em;
+        text-transform:uppercase;
+        transition:color .25s ease,transform .25s ease;
+        display:inline-block;
+      }
+      .site-footer a:hover {
+        color:var(--red);
+        transform:translateX(-4px);
+      }
+      body { background:#f3e8cc; color:#191919; background-image:radial-gradient(rgba(25,25,25,.08) .7px,transparent .7px); background-size:5px 5px; }
+      .site-header { color:#191919; }
+      main { background:transparent; }
+      .proj-card .frame { background:#18542a; border:4px solid #191919; border-radius:22px; clip-path:none; box-shadow:7px 7px 0 #191919; }
+      .proj-card h3 { text-shadow:2px 2px 0 #191919; }
+      .proj-card .plaque { border-top:3px solid #191919; }
+      .section-label, .proj-card .num, .proj-card h3 { color:#d52518; }
+      .proj-card:nth-child(even) .frame { background:#2457a6; }
+      .modal { background:rgba(25,25,25,.78); }
+      .modal-card { background:#f3e8cc; color:#191919; border:4px solid #191919; box-shadow:9px 9px 0 #191919; }
+      .slide-frame { background:#f3e8cc; border:4px solid #191919; }
+      .slide-nav { background:#d52518; color:#f3e8cc; border:3px solid #191919; }
+      .slide-nav:hover { background:#ffc926; color:#191919; }
+      .slide-dots button { border:2px solid #191919; }
+      .slide-dots button.active { background:#d52518; }
+    </style>
+  <script src="https://unpkg.com/lenis@1/dist/lenis.min.js"></script>
+    <style>
+      .bg-marquee-row span { color:#d52518; }
+      .bg-marquee-row.reverse span { color:#2457a6; }
+      .intro h1 { color:#d52518; text-shadow:4px 4px 0 #ffc926; }
+      .intro p { color:#18542a; }
+      .proj-card:nth-child(3) .frame { background:#ffc926; }
+      .proj-card:nth-child(4) .frame { background:#f96015; }
+      .proj-card:nth-child(5) .frame { background:#9abc05; }
+      .proj-card:nth-child(6) .frame { background:#2457a6; }
+      .proj-card:nth-child(7) .frame { background:#d52518; }
+      .proj-card:nth-child(8) .frame { background:#ffc926; }
+      .site-footer { background:#18542a; color:#f3e8cc; border-top:5px solid #191919; }
+      .site-footer a:hover { color:#ffc926; }
+      .intro, .intro h1, .intro p { opacity:1 !important; transform:none !important; filter:none !important; animation:none !important; }
+      .intro h1 { display:block; color:#d52518 !important; }
+      .intro p { display:block; color:#18542a !important; }
+      main { z-index:2; }
+      .intro {
+        position:relative;
+        z-index:3;
+        max-width:900px;
+        padding:24px 28px 28px;
+        background:rgba(243,232,204,.96);
+        border:4px solid #191919;
+        border-radius:24px;
+        box-shadow:8px 8px 0 #191919;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg-marquee" aria-hidden="true">
+      <div class="bg-marquee-row"><span>Project Garage âœ• Welcome âœ•</span><span>Project Garage âœ• Welcome âœ•</span></div>
+      <div class="bg-marquee-row reverse"><span>Project Garage âœ• Welcome âœ•</span><span>Project Garage âœ• Welcome âœ•</span></div>
+      <div class="bg-marquee-row"><span>Project Garage âœ• Welcome âœ•</span><span>Project Garage âœ• Welcome âœ•</span></div>
+    </div>
+    <div class="page-loader" aria-hidden="true">
+      <div class="loader-bars">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </div>
+      <div class="loader-content">
+        <div class="start-lights"><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <a class="wordmark" href="home-retro.html"><span>Gabriel</span><span>Dalusong</span></a>
+      <nav class="menu"><a class="contact" href="say-hello-retro.html" aria-label="Say hello"></a></nav>
+    </header>
+
+    <main>
+      <div class="intro">
+        <h1>Project<br>garage.</h1>
+        <p>The full lineup â€” school builds, freelance work, and a couple of just-for-fun experiments. Click any card for a closer look.</p>
+      </div>
+
+      <div class="section-label">
+        <span>Eight builds</span>
+        <span>Click to inspect</span>
+      </div>
+
+      <div class="project-grid">
+        <article class="proj-card" data-title="Room Management System" data-img="pr3.png" data-description="An interactive StayHub demo for room assignments, billing, resident requests, and complaints." data-images="stayhub-register.png|stayhub-login.png|stayhub-admin-dashboard.png|stayhub-user-management.png|stayhub-billing-history.png|stayhub-complaints-management.png|stayhub-customer-overview.png|stayhub-complaints-center.png" data-image-labels="Register|Login|Admin Dashboard|User Management|Billing History|Complaints Management|Customer Overview|Complaints Center" data-image-descriptions="New tenants create an account here before they can log in and access their room, billing, and complaint records.|Returning users sign in with their username and password to reach their dashboard.|The admin's home view â€” a snapshot of total users, rooms, availability, and billing, plus quick actions to add or assign rooms.|Admins manage tenant accounts here â€” editing details, checking status, and removing accounts when needed.|A record of every bill already marked as paid, broken down by tenant, utility cost, and payment date.|Where admins review, respond to, and resolve complaints submitted by tenants.|A tenant's personal dashboard â€” their current room, billing records, and dormitory-wide room availability at a glance.|Tenants submit concerns here and can track the status and admin replies to their past complaints.">
+          <div class="frame"><img src="stayhub.jpg" alt="StayHub preview" onerror="this.closest('.frame').classList.add('img-missing')"><span class="fallback-label">StayHub</span></div>
+          <div class="plaque">
+            <div class="plaque-left">
+              <span class="num">No. 01</span>
+              <h3>StayHub</h3>
+              <p class="blurb">School project â€” assigns rooms, bills tenants, and handles complaints, room, ID, and password change requests.</p>
+            </div>
+            <span class="tag">Live demo</span>
+          </div>
+        </article>
+
+        <article class="proj-card" data-title="Project Smile" data-img="pr1.png" data-description="A fundraising website for Project Smile, featuring donation flow and campaign progress tracking." data-images="ps1.jpg|ps2.jpg|ps3.jpg|ps4.jpg" data-image-labels="Campaign Home|Our Story|Memories|Donation Form" data-image-descriptions="The campaign home introduces Project Smile's mission and shows the current fundraising goal for feeding indigenous children.|The story section explains how Project Smile grew into a yearly family mission serving communities in Zambales.|The memories gallery highlights past outreach moments, shared meals, and the children reached by the campaign.|Donors enter their details and donation amount here before continuing to the GCash payment step.">
+          <div class="frame"><img src="projs.jpg" alt="Project Smile preview" onerror="this.closest('.frame').classList.add('img-missing')"><span class="fallback-label">Project Smile</span></div>
+          <div class="plaque">
+            <div class="plaque-left">
+              <span class="num">No. 02</span>
+              <h3>Project Smile</h3>
+              <p class="blurb">A local, private GoFundMe-style platform supporting indigenous communities in Zambales, with GCash donations.</p>
+            </div>
+            <span class="tag">Live demo</span>
+          </div>
+        </article>
+
+        <article class="proj-card" data-title="DENR Accounting System" data-img="pr4.png" data-description="A browser-based accounting workflow that replaces slow spreadsheet encoding with a clearer, purpose-built interface." data-images="denr1.jpg|denr2.jpg|denr3.jpg" data-image-labels="System Dashboard|Data Encoding|Encoding History" data-image-descriptions="The main dashboard gives users quick access to data encoding, saved history, reports, and payee records.|The spreadsheet-style encoding page captures payees, particulars, OR and DV numbers, amounts, tax, and automatically calculated totals.|The history page stores previous encoding sessions so users can restore or download their accounting records.">
+          <div class="frame"><img src="denr.jpg" alt="DENR Accounting System preview" onerror="this.closest('.frame').classList.add('img-missing')"><span class="fallback-label">DENR<br>Accounting</span></div>
+          <div class="plaque">
+            <div class="plaque-left">
+              <span class="num">No. 03</span>
+              <h3>DENR Accounting</h3>
+              <p class="blurb">A spreadsheet-style accounting tool with built-in formulas, built for fast, easy Excel file downloads.</p>
+            </div>
+            <span class="tag">Live demo</span>
+          </div>
+        </article>
+
+        <article class="proj-card" data-title="Sambalikha Art Gallery" data-img="sambalikha1.jpg" data-description="An online gallery and cafe â€” browse current exhibits, painting prices, and artist profiles." data-images="sl1.jpg|sl2.jpg|sl3.jpg|sl4.jpg|sl5.jpg|sl6.jpg" data-image-labels="Gallery Home|Art Gallery|Monthly Activities|Gallery Showcase|Contact and Location|Artwork Detail" data-image-descriptions="The landing page welcomes visitors to Sambalikha Art Cafe and introduces its cozy art-filled experience.|Visitors can explore the gallery and discover artwork from local and international artists.|The activities page highlights free monthly workshops, exhibitions, and community art events.|A gallery showcase presents the cafe's featured paintings and current exhibits in a visual grid.|Visitors can find Sambalikha's contact details, location, social links, and upcoming events here.|The artwork detail view gives visitors a closer look at a featured painting and its story.">
+          <div class="frame"><img src="sambalikha1.jpg" alt="Sambalikha Art Gallery preview" onerror="this.closest('.frame').classList.add('img-missing')"><span class="fallback-label">Sambalikha<br>Art Gallery</span></div>
+          <div class="plaque">
+            <div class="plaque-left">
+              <span class="num">No. 04</span>
+              <h3>Sambalikha Art Gallery</h3>
+              <p class="blurb">A gallery-slash-cafe site â€” see what's on exhibit, painting prices, and visit each artist's page.</p>
+            </div>
+            <span class="tag">Live demo</span>
+          </div>
+        </article>
+
+        <article class="proj-card" data-title="Sett's Web Portfolio" data-img="pr1.png" data-description="A personal portfolio built for my cousin, showcasing his artwork, background, and contact details.">
+          <div class="frame"><img src="pr1.png" alt="Sett's Web Portfolio preview" onerror="this.closest('.frame').classList.add('img-missing')"><span class="fallback-label">Sett's<br>Portfolio</span></div>
+          <div class="plaque">
+            <div class="plaque-left">
+              <span class="num">No. 05</span>
+              <h3>Sett's Portfolio</h3>
+              <p class="blurb">A personal site built for my cousin â€” his artwork, background, and a way to get in touch.</p>
+            </div>
+            <span class="tag">Concept</span>
+          </div>
+        </article>
+
+        <article class="proj-card" data-title="Periodic Table Website" data-img="pt1.jpg" data-description="An interactive periodic table website for exploring elements, atom models, dark mode, and detailed scientific facts." data-images="pt1.jpg|pt2.jpg|pt3.jpg|pt4.jpg" data-image-labels="Interactive Periodic Table|Atom Detail View|Dark Mode|Element Facts" data-image-descriptions="The main experience presents all elements in an interactive periodic table with quick element previews and a light theme.|An element detail panel lets visitors switch between an element's photo and atom model while viewing its core information.|The dark theme gives the periodic table and element details a darker, high-contrast visual mode.|The detailed view presents an element's category, state, electron configuration, common uses, real-life examples, and interesting facts.">
+          <div class="frame"><img src="pt1.jpg" alt="Periodic Table website preview" onerror="this.closest('.frame').classList.add('img-missing')"><span class="fallback-label">Periodic<br>Table</span></div>
+          <div class="plaque">
+            <div class="plaque-left">
+              <span class="num">No. 06</span>
+              <h3>Periodic Table</h3>
+              <p class="blurb">An interactive element explorer with atom visuals, dark mode, and detailed facts for every element.</p>
+            </div>
+            <span class="tag">Live demo</span>
+          </div>
+        </article>
+
+        <article class="proj-card" data-title="Nothing" data-img="not1.jpg" data-description="A playful experimental website about absolutely nothing, built as a humorous interactive scroll experience." data-images="not1.jpg|not2.jpg|not3.jpg|not4.jpg|not5.jpg|not6.jpg|not7.jpg" data-image-labels="Nothing Home|Why Are You Here?|Nothing Section|Do Nothing|Important Information|Nothing System|The End" data-image-descriptions="The landing page introduces a website about absolutely nothing and invites visitors to keep scrolling.|A deadpan explanation of why visitors are here, even though there is nothing to find.|A giant O2 section insists that this part also has nothing, with a tiny interactive detail.|The site offers a button that promises to do absolutely nothing.|An important information page confirms that there is no important information at all.|A playful system status screen reports that nothing is functioning perfectly fine.|The closing page sends visitors away with the reminder that there was never anything to find.">
+          <div class="frame"><img src="not1.jpg" alt="Nothing website preview" onerror="this.closest('.frame').classList.add('img-missing')"><span class="fallback-label">Nothing</span></div>
+          <div class="plaque">
+            <div class="plaque-left">
+              <span class="num">No. 07</span>
+              <h3>Nothing</h3>
+              <p class="blurb">A humorous experimental website about nothing, made for no particular reason.</p>
+            </div>
+            <span class="tag">For fun</span>
+          </div>
+        </article>
+
+        <article class="proj-card" data-title="Technically Random" data-img="rdm1.jpg" data-description="A colorful experimental website collecting random facts, topics, and curious bits of technology." data-images="rdm1.jpg|rdm2.jpg|rdm3.jpg|rdm4.jpg|rdm5.jpg|rdm6.jpg" data-image-labels="Random Home|Random Facts|More Facts|Topics|Dark Mode|Keep Looking" data-image-descriptions="The landing page introduces Technically Random as a collection of curious facts and unexpected technology stories.|A featured fact explains the surprising wooden origin of the first computer mouse.|Another fact compares the computing power of modern phones with early spacecraft.|The topics page lets visitors browse categories such as computers, AI, internet, programming, gadgets, and digital history.|The dark theme presents the topic browser and featured fact in a high-contrast layout.|The closing section encourages visitors to keep looking for another curious detail.">
+          <div class="frame"><img src="rdm1.jpg" alt="Technically Random website preview" onerror="this.closest('.frame').classList.add('img-missing')"><span class="fallback-label">Technically<br>Random</span></div>
+          <div class="plaque">
+            <div class="plaque-left">
+              <span class="num">No. 08</span>
+              <h3>Technically Random</h3>
+              <p class="blurb">A colorful random-facts site exploring technology, topics, and surprising details.</p>
+            </div>
+            <span class="tag">For fun</span>
+          </div>
+        </article>
+
+      </div>
+    </main>
+    <footer class="site-footer">
+      <p>gabriel dalusong 2026</p>
+      <nav>
+        <a href="home-retro.html">Home</a>
+        <a href="personal-retro.html">Off track</a>
+        <a href="say-hello-retro.html">Contact me</a>
+      </nav>
+    </footer>
+
+    <div class="modal" id="modal" aria-hidden="true">
+      <article class="modal-card">
+        <button class="close" type="button">Close Ã—</button>
+        <p class="mono">Project preview</p>
+        <h2 id="modal-title">Project</h2>
+        <p id="modal-description">Project description.</p>
+        <p id="modal-status" class="mono" hidden></p>
+        <div id="slideshow-view" class="slideshow">
+          <div class="slide-frame">
+            <img id="slide-image" src="" alt="Screenshot">
+            <div id="slide-overlay" class="slide-overlay" hidden>
+              <div class="slide-copy">
+                <h3 id="slide-caption"></h3>
+                <p id="slide-description"></p>
+              </div>
+            </div>
+            <button type="button" class="slide-nav prev" aria-label="Previous screenshot">â€¹</button>
+            <button type="button" class="slide-nav next" aria-label="Next screenshot">â€º</button>
+          </div>
+          <div class="slide-meta">
+            <span id="slide-counter"></span>
+          </div>
+          <div id="slide-dots" class="slide-dots"></div>
+        </div>
+      </article>
+    </div>
+
+    <script>
+      (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !window.Lenis) return;
+        const lenis = new Lenis({ duration:1.15, smoothWheel:true, smoothTouch:false });
+        const raf = (time) => {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        };
+        requestAnimationFrame(raf);
+      })();
+
+      const modal = document.querySelector('#modal');
+      const title = document.querySelector('#modal-title');
+      const description = document.querySelector('#modal-description');
+      const status = document.querySelector('#modal-status');
+      const slideImage = document.querySelector('#slide-image');
+      const slideOverlay = document.querySelector('#slide-overlay');
+      const slideCaption = document.querySelector('#slide-caption');
+      const slideDescription = document.querySelector('#slide-description');
+      const slideCounter = document.querySelector('#slide-counter');
+      const slideDots = document.querySelector('#slide-dots');
+
+      let slides = [];
+      let slideIndex = 0;
+
+      const prevBtn = document.querySelector('.slide-nav.prev');
+      const nextBtn = document.querySelector('.slide-nav.next');
+
+      const renderSlide = () => {
+        if (!slides.length) return;
+        const slide = slides[slideIndex];
+        slideImage.src = slide.src;
+        slideImage.alt = slide.label;
+        slideCaption.textContent = slide.label;
+        slideDescription.textContent = slide.desc;
+        slideOverlay.hidden = !slide.desc;
+        slideCounter.textContent = (slideIndex + 1) + ' / ' + slides.length;
+        Array.from(slideDots.children).forEach((dot, i) => dot.classList.toggle('active', i === slideIndex));
+        const multi = slides.length > 1;
+        prevBtn.hidden = !multi;
+        nextBtn.hidden = !multi;
+        slideDots.hidden = !multi;
+        slideCounter.hidden = !multi;
+      };
+
+      const buildDots = () => {
+        slideDots.innerHTML = '';
+        slides.forEach((_, i) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.setAttribute('aria-label', 'Go to screenshot ' + (i + 1));
+          dot.addEventListener('click', () => { slideIndex = i; renderSlide(); });
+          slideDots.appendChild(dot);
+        });
+      };
+
+      prevBtn.addEventListener('click', () => {
+        slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+        renderSlide();
+      });
+      nextBtn.addEventListener('click', () => {
+        slideIndex = (slideIndex + 1) % slides.length;
+        renderSlide();
+      });
+
+      document.querySelectorAll('.proj-card[data-images]').forEach((card) => {
+        const images = card.dataset.images.split('|').map((s) => s.trim()).filter(Boolean);
+        if (images.length < 2) return;
+        const img = card.querySelector('.frame img');
+        if (!img) return;
+        img.src = images[0];
+        let idx = 0;
+        setInterval(() => {
+          idx = (idx + 1) % images.length;
+          img.style.opacity = '0';
+          setTimeout(() => {
+            img.src = images[idx];
+            img.style.opacity = '1';
+          }, 350);
+        }, 2600);
+      });
+
+      document.querySelectorAll('[data-title]').forEach((card) => {
+        card.addEventListener('click', () => {
+          title.textContent = card.dataset.title;
+          description.textContent = card.dataset.description || 'Project preview.';
+          status.textContent = card.dataset.status || '';
+          status.hidden = !card.dataset.status;
+
+          const imageList = card.dataset.images ? card.dataset.images.split('|').map((s) => s.trim()).filter(Boolean) : (card.dataset.img ? [card.dataset.img] : []);
+          const labelList = card.dataset.imageLabels ? card.dataset.imageLabels.split('|').map((s) => s.trim()) : [];
+          const descList = card.dataset.imageDescriptions ? card.dataset.imageDescriptions.split('|').map((s) => s.trim()) : [];
+
+          slides = imageList.map((src, i) => ({ src, label: labelList[i] || card.dataset.title, desc: descList[i] || '' }));
+          slideIndex = 0;
+          buildDots();
+          renderSlide();
+
+          modal.classList.add('active');
+          modal.setAttribute('aria-hidden', 'false');
+        });
+      });
+
+      const closeModal = () => {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+      };
+
+      document.querySelector('.close').onclick = closeModal;
+      modal.onclick = (event) => { if (event.target === modal) closeModal(); };
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeModal(); });
+
+      (function () {
+        const loader = document.querySelector('.page-loader');
+        if (!loader) return;
+        const reveal = () => loader.classList.add('is-open');
+        if (document.readyState === 'complete') {
+          requestAnimationFrame(reveal);
+        } else {
+          window.addEventListener('load', reveal);
+        }
+        document.addEventListener('click', (event) => {
+          const link = event.target.closest('a[href]');
+          if (!link) return;
+          const href = link.getAttribute('href');
+          if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || link.target === '_blank' || link.hasAttribute('download')) return;
+          let url;
+          try { url = new URL(href, window.location.href); } catch (e) { return; }
+          if (url.origin !== window.location.origin) return;
+          event.preventDefault();
+          loader.classList.remove('is-open');
+          setTimeout(() => { window.location.href = url.href; }, 1000);
+        });
+      })();
+
+      (function () {
+        let scrollDirection = 'down';
+        let previousScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+          scrollDirection = window.scrollY >= previousScrollY ? 'down' : 'up';
+          previousScrollY = window.scrollY;
+        }, { passive:true });
+
+        const revealItems = document.querySelectorAll('.proj-card, .section-label');
+        revealItems.forEach((item) => item.classList.add('scroll-reveal'));
+
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.intersectionRatio >= 0.16) {
+              entry.target.dataset.revealDirection = scrollDirection;
+              entry.target.classList.add('is-visible');
+            } else if (entry.intersectionRatio <= 0) {
+              entry.target.classList.remove('is-visible');
+            }
+          });
+        }, { threshold:[0, .16], rootMargin:'-6% 0px -8% 0px' });
+
+        revealItems.forEach((item) => revealObserver.observe(item));
+      })();
+    </script>
+  </body>
+</html>

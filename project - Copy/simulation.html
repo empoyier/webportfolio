@@ -1,0 +1,128 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StayHub Login - Interactive Demo</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .demo-hidden { display:none !important; }
+    .demo-screen { min-height:100vh; }
+    .demo-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+    .demo-actions button { width:auto; }
+    .demo-note { padding:13px 15px; border:1px solid #bbf7d0; border-radius:14px; background:#f0fdf4; color:#166534; font-weight:700; }
+    .demo-nav { border:0; background:transparent; color:#fff; text-align:left; font:inherit; cursor:pointer; }
+    .demo-nav.active { background:rgba(37,99,235,.34); }
+    .demo-form { display:grid; gap:13px; max-width:580px; }
+    .demo-form textarea { min-height:120px; }
+    .demo-empty { padding:28px; border:1px dashed #cbd5e1; border-radius:16px; color:#64748b; text-align:center; }
+    @media (max-width:768px) { .demo-actions button { width:100%; } }
+  </style>
+</head>
+<body>
+  <main class="auth-page demo-screen" id="login-screen">
+    <div class="auth-shell">
+      <section class="auth-intro">
+        <h1 class="auth-brand-title">StayHub</h1>
+        <p class="intro-copy">Sign in to manage room availability, billing, and tenant records from one organized dashboard.</p>
+      </section>
+      <section class="auth-card">
+        <h2>Login</h2>
+        <p class="auth-subtitle">Enter your account details to continue.</p>
+        <form class="auth-form" id="demo-login">
+          <input id="demo-name" type="text" value="Alex Rivera" placeholder="Username" required>
+          <input type="password" value="demo123" placeholder="Password" aria-label="Demo password" readonly>
+          <button type="submit">Login</button>
+        </form>
+        <p class="auth-link-row">No account yet? <a href="#" id="demo-register">Create one here</a></p>
+      </section>
+    </div>
+  </main>
+
+  <main class="dashboard-page demo-screen demo-hidden" id="dashboard-screen">
+    <div class="dashboard-layout">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="sidebar-logo"><img src="logo.png" alt="StayHub logo"></div>
+          <div><p class="sidebar-label">StayHub</p><h1>Customer Panel</h1></div>
+        </div>
+        <nav class="sidebar-nav">
+          <p class="nav-section-title">Navigation</p>
+          <button class="nav-item demo-nav active" data-view="overview"><span>My Account</span><small>Room and account details</small></button>
+          <button class="nav-item demo-nav" data-view="complaint"><span>Complaints</span><small>Submit your concerns</small></button>
+          <button class="nav-item demo-nav" data-view="request"><span>Requests</span><small>Room &amp; account changes</small></button>
+        </nav>
+        <div class="sidebar-summary"><p class="sidebar-caption">Signed in as</p><strong id="sidebar-name">Alex Rivera</strong><span>Customer</span></div>
+      </aside>
+
+      <div class="main-panel">
+        <header class="topbar">
+          <div class="topbar-copy"><h2 id="view-title">Customer Overview</h2><p class="topbar-subtitle" id="view-subtitle">Review your room assignment, room availability, and recent billing records.</p></div>
+          <div class="topbar-actions"><div class="topbar-user-card"><span class="topbar-user-label">Account</span><strong id="topbar-name">Alex Rivera</strong><small>Customer</small></div><button class="logout-button" id="demo-logout">Sign Out</button></div>
+        </header>
+
+        <section id="overview-view">
+          <div class="stats-grid">
+            <article class="stat-card"><span class="stat-label">Current Room</span><strong>12A</strong></article>
+            <article class="stat-card"><span class="stat-label">Available Rooms</span><strong>8</strong></article>
+            <article class="stat-card"><span class="stat-label">Total Room Inventory</span><strong>36</strong></article>
+            <article class="stat-card"><span class="stat-label">My Billing Records</span><strong>2</strong></article>
+          </div>
+          <div class="content-grid">
+            <article class="panel-card"><div class="panel-header"><h3>My Room</h3><p>Current room assignment and availability summary for your account.</p></div><div class="detail-block"><strong>Room Number</strong><span>12A</span></div><div class="detail-block"><strong>Assigned At</strong><span>January 15, 2026</span></div></article>
+            <article class="panel-card"><div class="panel-header"><h3>Room Availability</h3><p>Current room inventory status across the dormitory.</p></div><div class="detail-block"><strong>Available Rooms</strong><span>8</span></div><div class="detail-block"><strong>Total Rooms</strong><span>36</span></div></article>
+          </div>
+          <article class="table-card"><div class="panel-header"><h3>My Billing Records</h3><p>Review your billing history for electricity and water charges.</p></div><table class="data-table"><tr><th>Electric</th><th>Water</th><th>Total</th><th>Billing Month</th><th>Created At</th></tr><tr><td>PHP 850</td><td>PHP 180</td><td>PHP 1,030</td><td>July 2026</td><td>July 31, 2026</td></tr><tr><td>PHP 810</td><td>PHP 180</td><td>PHP 990</td><td>June 2026</td><td>June 30, 2026</td></tr></table></article>
+        </section>
+
+        <section id="request-view" class="demo-hidden"><article class="panel-card"><div class="panel-header"><h3>Send a request</h3><p>Try a room transfer, account update, or maintenance request.</p></div><form class="demo-form" data-feedback="request-feedback"><label><span>Request type</span><select><option>Room transfer</option><option>Account update</option><option>Maintenance</option></select></label><label><span>Details</span><textarea required placeholder="Tell the property manager what you need..."></textarea></label><button>Submit request</button></form><p class="demo-note demo-hidden" id="request-feedback">Request submitted in this demo. In the full system it would be stored for an administrator to review.</p></article></section>
+        <section id="complaint-view" class="demo-hidden"><article class="panel-card"><div class="panel-header"><h3>Submit a concern</h3><p>Describe an issue and send it to the property manager.</p></div><form class="demo-form" data-feedback="complaint-feedback"><label><span>Subject</span><input required placeholder="Example: Water issue in Room 12A"></label><label><span>Concern</span><textarea required placeholder="Describe the issue..."></textarea></label><button>Send concern</button></form><p class="demo-note demo-hidden" id="complaint-feedback">Concern submitted in this demo. In the full system it would appear in the administratorâ€™s complaints queue.</p></article></section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const loginScreen = document.querySelector('#login-screen');
+    const dashboardScreen = document.querySelector('#dashboard-screen');
+    const views = ['overview', 'request', 'complaint'];
+    const viewDetails = {
+      overview: ['Customer Overview', 'Review your room assignment, room availability, and recent billing records.'],
+      request: ['Requests', 'Submit a room or account change request.'],
+      complaint: ['Complaints', 'Submit your concerns to the property manager.']
+    };
+
+    document.querySelector('#demo-login').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const name = document.querySelector('#demo-name').value.trim() || 'Alex Rivera';
+      document.querySelector('#sidebar-name').textContent = name;
+      document.querySelector('#topbar-name').textContent = name;
+      loginScreen.classList.add('demo-hidden');
+      dashboardScreen.classList.remove('demo-hidden');
+    });
+
+    document.querySelector('#demo-logout').addEventListener('click', () => {
+      dashboardScreen.classList.add('demo-hidden');
+      loginScreen.classList.remove('demo-hidden');
+    });
+
+    document.querySelectorAll('.demo-nav').forEach((button) => {
+      button.addEventListener('click', () => {
+        const view = button.dataset.view;
+        views.forEach((name) => document.querySelector('#' + name + '-view').classList.toggle('demo-hidden', name !== view));
+        document.querySelectorAll('.demo-nav').forEach((item) => item.classList.toggle('active', item === button));
+        document.querySelector('#view-title').textContent = viewDetails[view][0];
+        document.querySelector('#view-subtitle').textContent = viewDetails[view][1];
+      });
+    });
+
+    document.querySelectorAll('.demo-form').forEach((form) => {
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        document.querySelector('#' + form.dataset.feedback).classList.remove('demo-hidden');
+        form.reset();
+      });
+    });
+  </script>
+</body>
+</html>
+

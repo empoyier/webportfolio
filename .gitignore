@@ -1,0 +1,22 @@
+# Local configuration and credentials
+**/config.js
+**/.env*
+!**/.env.example
+**/Login Credentials.txt
+
+# Local editor settings
+**/.vscode/
+
+# Duplicate site backups and unrelated projects
+/files/
+/files1/
+/files2/
+/finals2ndYear/
+/simulate1/
+/tmp/
+/files*.zip
+/proposal.pdf
+
+# Keep only the public StayHub demo from this project folder
+/project - Copy/*
+!/project - Copy/simulation.html
