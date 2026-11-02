@@ -112,9 +112,6 @@
       .modal-card h2 { margin:0 0 14px; font:clamp(46px,8vw,100px)/.8 Anton,Impact,sans-serif; text-transform:uppercase; color:var(--red); }
       .modal-card p { max-width:580px; line-height:1.6; }
       .modal-card img { width:100%; max-height:440px; object-fit:cover; margin-top:18px; }
-      .project-frame { width:100%; height:min(64vh,720px); margin-top:18px; border:2px solid var(--red); background:var(--ink); }
-      .modal-live-link { display:inline-block; margin-top:16px; padding:10px 14px; border:2px solid var(--red); color:var(--red); font-weight:800; text-transform:uppercase; transition:background .25s ease,color .25s ease; }
-      .modal-live-link:hover { background:var(--red); color:var(--cream); }
       .close { position:absolute; top:15px; right:17px; background:none; border:0; color:var(--cream); font:500 11px "DM Mono",monospace; cursor:pointer; }
 
       .page-loader { position:fixed; inset:0; z-index:9999; pointer-events:none; }
@@ -217,7 +214,7 @@
       </div>
 
       <div class="project-grid">
-        <article class="proj-card" data-title="Room Management System" data-img="pr3.png" data-url="project - Copy/simulation.html" data-description="An interactive StayHub demo for room assignments, billing, resident requests, and complaints.">
+        <article class="proj-card" data-title="Room Management System" data-img="pr3.png" data-description="An interactive StayHub demo for room assignments, billing, resident requests, and complaints.">
           <div class="frame"><img src="stayhub.jpg" alt="StayHub preview"></div>
           <div class="plaque">
             <div class="plaque-left">
@@ -229,7 +226,7 @@
           </div>
         </article>
 
-        <article class="proj-card" data-title="Project Smile" data-img="pr1.png" data-url="New folder (2)/index.html" data-description="A fundraising website for Project Smile, featuring donation flow and campaign progress tracking.">
+        <article class="proj-card" data-title="Project Smile" data-img="pr1.png" data-description="A fundraising website for Project Smile, featuring donation flow and campaign progress tracking.">
           <div class="frame"><img src="projs.jpg" alt="Project Smile preview"></div>
           <div class="plaque">
             <div class="plaque-left">
@@ -241,7 +238,7 @@
           </div>
         </article>
 
-        <article class="proj-card" data-title="DENR Accounting System" data-img="pr4.png" data-url="simulate1/index.html" data-description="A browser-based accounting workflow that replaces slow spreadsheet encoding with a clearer, purpose-built interface.">
+        <article class="proj-card" data-title="DENR Accounting System" data-img="pr4.png" data-description="A browser-based accounting workflow that replaces slow spreadsheet encoding with a clearer, purpose-built interface.">
           <div class="frame"><img src="denr.jpg" alt="DENR Accounting System preview"></div>
           <div class="plaque">
             <div class="plaque-left">
@@ -253,7 +250,7 @@
           </div>
         </article>
 
-        <article class="proj-card" data-title="Sambalikha Art Gallery" data-img="finals2ndYear/welcome.png" data-url="finals2ndYear/homepage.html" data-description="An online gallery and cafe — browse current exhibits, painting prices, and artist profiles.">
+        <article class="proj-card" data-title="Sambalikha Art Gallery" data-img="finals2ndYear/welcome.png" data-description="An online gallery and cafe — browse current exhibits, painting prices, and artist profiles.">
           <div class="frame"><img src="finals2ndYear/welcome.png" alt="Sambalikha Art Gallery preview"></div>
           <div class="plaque">
             <div class="plaque-left">
@@ -306,8 +303,6 @@
         <h2 id="modal-title">Project</h2>
         <p id="modal-description">Project description.</p>
         <p id="modal-status" class="mono" hidden></p>
-        <a id="modal-live-link" class="modal-live-link" href="" target="_blank" rel="noreferrer" hidden>Open full project ↗</a>
-        <iframe id="project-frame" class="project-frame" title="Project simulation" hidden></iframe>
         <img id="modal-image" src="" alt="Project preview">
       </article>
     </div>
@@ -318,8 +313,6 @@
       const image = document.querySelector('#modal-image');
       const description = document.querySelector('#modal-description');
       const status = document.querySelector('#modal-status');
-      const liveLink = document.querySelector('#modal-live-link');
-      const projectFrame = document.querySelector('#project-frame');
 
       document.querySelectorAll('[data-title]').forEach((card) => {
         card.addEventListener('click', () => {
@@ -329,16 +322,7 @@
           image.alt = card.dataset.title + ' preview';
           status.textContent = card.dataset.status || '';
           status.hidden = !card.dataset.status;
-          projectFrame.hidden = !card.dataset.url;
-          image.hidden = Boolean(card.dataset.url);
-          liveLink.hidden = !card.dataset.url;
-          if (card.dataset.url) {
-            projectFrame.src = encodeURI(card.dataset.url);
-            liveLink.href = encodeURI(card.dataset.url);
-          } else {
-            projectFrame.removeAttribute('src');
-            liveLink.removeAttribute('href');
-          }
+          image.hidden = false;
           modal.classList.add('active');
           modal.setAttribute('aria-hidden', 'false');
         });
@@ -347,7 +331,6 @@
       const closeModal = () => {
         modal.classList.remove('active');
         modal.setAttribute('aria-hidden', 'true');
-        projectFrame.removeAttribute('src');
       };
 
       document.querySelector('.close').onclick = closeModal;

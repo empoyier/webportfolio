@@ -844,21 +844,6 @@
     .slide-dots { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
     .slide-dots button { width:9px; height:9px; border-radius:50%; border:1px solid var(--red); background:none; padding:0; cursor:pointer; }
     .slide-dots button.active { background:var(--red); }
-    .project-frame {
-      width:100%;
-      height:min(64vh,720px);
-      margin-top:18px;
-      border:2px solid var(--ink);
-      background:var(--cream)
-    }
-    .modal-live-link {
-      display:inline-block;
-      margin-top:16px;
-      padding:10px 14px;
-      border:2px solid var(--ink);
-      font-weight:800;
-      text-transform:uppercase
-    }
     .close {
       position:absolute;
       top:15px;
@@ -1224,14 +1209,13 @@
             </div>
             <div class="projects-heading">
               <h2 class="display">Project<br>garage.</h2>
-              <a class="personal-more arrow-cream" href="projects-retro.html" aria-label="View project garage"></a>
             </div>
             <div class="project-rail">
-                            <article class="project" data-title="Project Smile" data-img="pr1.png" data-url="New folder (2)/index.html" data-description="A fundraising website for Project Smile, featuring donation flow and campaign progress tracking." data-images="ps1.jpg|ps2.jpg|ps3.jpg|ps4.jpg" data-image-labels="Campaign Home|Our Story|Memories|Donation Form" data-image-descriptions="The campaign home introduces Project Smile's mission and shows the current fundraising goal for feeding indigenous children.|The story section explains how Project Smile grew into a yearly family mission serving communities in Zambales.|The memories gallery highlights past outreach moments, shared meals, and the children reached by the campaign.|Donors enter their details and donation amount here before continuing to the GCash payment step.">
+                            <article class="project" data-title="Project Smile" data-img="pr1.png" data-description="A fundraising website for Project Smile, featuring donation flow and campaign progress tracking." data-images="ps1.jpg|ps2.jpg|ps3.jpg|ps4.jpg" data-image-labels="Campaign Home|Our Story|Memories|Donation Form" data-image-descriptions="The campaign home introduces Project Smile's mission and shows the current fundraising goal for feeding indigenous children.|The story section explains how Project Smile grew into a yearly family mission serving communities in Zambales.|The memories gallery highlights past outreach moments, shared meals, and the children reached by the campaign.|Donors enter their details and donation amount here before continuing to the GCash payment step.">
                 <img src="projs.jpg" alt="Website project preview">
                 <h3>Project<br>smile</h3>
               </article>
-                            <article class="project" data-title="Room Management System" data-img="pr3.png" data-url="project - Copy/simulation.html" data-description="An interactive StayHub demo for room assignments, billing, resident requests, and complaints." data-images="stayhub-register.png|stayhub-login.png|stayhub-admin-dashboard.png|stayhub-user-management.png|stayhub-billing-history.png|stayhub-complaints-management.png|stayhub-customer-overview.png|stayhub-complaints-center.png" data-image-labels="Register|Login|Admin Dashboard|User Management|Billing History|Complaints Management|Customer Overview|Complaints Center" data-image-descriptions="New tenants create an account here before they can log in and access their room, billing, and complaint records.|Returning users sign in with their username and password to reach their dashboard.|The admin's home view — a snapshot of total users, rooms, availability, and billing, plus quick actions to add or assign rooms.|Admins manage tenant accounts here — editing details, checking status, and removing accounts when needed.|A record of every bill already marked as paid, broken down by tenant, utility cost, and payment date.|Where admins review, respond to, and resolve complaints submitted by tenants.|A tenant's personal dashboard — their current room, billing records, and dormitory-wide room availability at a glance.|Tenants submit concerns here and can track the status and admin replies to their past complaints.">
+                            <article class="project" data-title="Room Management System" data-img="pr3.png" data-description="An interactive StayHub demo for room assignments, billing, resident requests, and complaints." data-images="stayhub-register.png|stayhub-login.png|stayhub-admin-dashboard.png|stayhub-user-management.png|stayhub-billing-history.png|stayhub-complaints-management.png|stayhub-customer-overview.png|stayhub-complaints-center.png" data-image-labels="Register|Login|Admin Dashboard|User Management|Billing History|Complaints Management|Customer Overview|Complaints Center" data-image-descriptions="New tenants create an account here before they can log in and access their room, billing, and complaint records.|Returning users sign in with their username and password to reach their dashboard.|The admin's home view — a snapshot of total users, rooms, availability, and billing, plus quick actions to add or assign rooms.|Admins manage tenant accounts here — editing details, checking status, and removing accounts when needed.|A record of every bill already marked as paid, broken down by tenant, utility cost, and payment date.|Where admins review, respond to, and resolve complaints submitted by tenants.|A tenant's personal dashboard — their current room, billing records, and dormitory-wide room availability at a glance.|Tenants submit concerns here and can track the status and admin replies to their past complaints.">
                 <img src="stayhub.jpg" alt="Digital concept preview">
                 <h3>Room<br>management</h3>
               </article>
@@ -1287,8 +1271,6 @@
             <h2 id="modal-title">Project</h2>
             <p id="modal-description">Project description.</p>
             <p id="modal-status" class="mono" hidden></p>
-            <a id="modal-live-link" class="modal-live-link" href="" target="_blank" rel="noreferrer" hidden>Open full project ↗</a>
-            <iframe id="project-frame" class="project-frame" title="Project simulation" hidden></iframe>
             <div id="slideshow-view" class="slideshow">
               <div class="slide-frame">
                 <img id="slide-image" src="" alt="Screenshot">
@@ -1323,8 +1305,6 @@
     const title = document.querySelector('#modal-title');
     const description = document.querySelector('#modal-description');
     const status = document.querySelector('#modal-status');
-    const liveLink = document.querySelector('#modal-live-link');
-    const projectFrame = document.querySelector('#project-frame');
     const slideImage = document.querySelector('#slide-image');
     const slideOverlay = document.querySelector('#slide-overlay');
     const slideCaption = document.querySelector('#slide-caption');
@@ -1379,15 +1359,6 @@
         description.textContent = card.dataset.description || 'Project preview.';
         status.textContent = card.dataset.status || '';
         status.hidden = !card.dataset.status;
-        projectFrame.hidden = Boolean(card.dataset.images) || !card.dataset.url;
-        liveLink.hidden = !card.dataset.url;    
-        if (card.dataset.url) {
-          projectFrame.src = encodeURI(card.dataset.url);
-          liveLink.href = encodeURI(card.dataset.url);
-        } else {
-          projectFrame.removeAttribute('src');
-          liveLink.removeAttribute('href');
-        }
         const imageList = card.dataset.images ? card.dataset.images.split('|').map((s) => s.trim()).filter(Boolean) : (card.dataset.img ? [card.dataset.img] : []);
         const labelList = card.dataset.imageLabels ? card.dataset.imageLabels.split('|').map((s) => s.trim()) : [];
         const descList = card.dataset.imageDescriptions ? card.dataset.imageDescriptions.split('|').map((s) => s.trim()) : [];
@@ -1403,7 +1374,6 @@
     const closeModal = () => {
       modal.classList.remove('active');
       modal.setAttribute('aria-hidden', 'true');
-      projectFrame.removeAttribute('src');
     };
 
     document.querySelector('.close').onclick = closeModal;
