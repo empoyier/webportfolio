@@ -30,10 +30,7 @@
       .line-field { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
       .line-field svg { position:absolute; width:220vmax; height:220vmax; left:50%; top:50%; transform:translate(-50%,-50%); opacity:.32; }
       .line-field path { fill:none; stroke:#f3e8cc; stroke-width:1.3; stroke-linecap:round; stroke-dasharray:26 18; }
-      .line-field .set-a { animation:line-drift-a 70s linear infinite; }
-      .line-field .set-b { animation:line-drift-b 90s linear infinite; opacity:.75; }
-      @keyframes line-drift-a { from { transform:translate(-50%,-50%) rotate(0deg); } to { transform:translate(-50%,-50%) rotate(360deg); } }
-      @keyframes line-drift-b { from { transform:translate(-50%,-50%) rotate(360deg); } to { transform:translate(-50%,-50%) rotate(0deg); } }
+      .line-field .set-b { opacity:.75; }
       @keyframes line-flow { to { stroke-dashoffset:-440; } }
       @media (prefers-reduced-motion:reduce) { .line-field .set-a, .line-field .set-b, .line-field path { animation:none; } }
       .intro h1 { margin:0; font:clamp(64px,13vw,180px)/.78 Anton,Impact,sans-serif; letter-spacing:-.05em; text-transform:uppercase; color:var(--cream); opacity:0; animation:fade-up .8s cubic-bezier(.16,1,.3,1) .1s forwards; }
