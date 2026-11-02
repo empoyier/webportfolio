@@ -21,7 +21,7 @@
       .wordmark { font:30px/.76 Anton,Impact,sans-serif; letter-spacing:-.04em; text-transform:uppercase; width:73px; }
       .wordmark span { display:block; }
       .menu .contact { width:70px; height:70px; display:grid; place-items:center; background:var(--red); border:4px solid var(--ink); border-radius:0; color:var(--ink); transition:background .25s ease,color .25s ease,border-color .25s ease; }
-      .menu .contact::before { content:"â†—"; font:48px/.8 Anton,Impact,sans-serif; animation:contact-arrow-nudge 1.6s ease-in-out infinite alternate; }
+      .menu .contact::before { content:"↗"; font:48px/.8 Anton,Impact,sans-serif; animation:contact-arrow-nudge 1.6s ease-in-out infinite alternate; }
       @keyframes contact-arrow-nudge { from { transform:translate(0,0); } to { transform:translate(5px,-5px); } }
       .menu .contact:hover { background:#fff; border-color:var(--red); color:var(--red); }
 
@@ -190,9 +190,9 @@
   </head>
   <body>
     <div class="bg-marquee" aria-hidden="true">
-      <div class="bg-marquee-row"><span>Project Garage âœ• Welcome âœ•</span><span>Project Garage âœ• Welcome âœ•</span></div>
-      <div class="bg-marquee-row reverse"><span>Project Garage âœ• Welcome âœ•</span><span>Project Garage âœ• Welcome âœ•</span></div>
-      <div class="bg-marquee-row"><span>Project Garage âœ• Welcome âœ•</span><span>Project Garage âœ• Welcome âœ•</span></div>
+      <div class="bg-marquee-row"><span>Project Garage ✕ Welcome ✕</span><span>Project Garage ✕ Welcome ✕</span></div>
+      <div class="bg-marquee-row reverse"><span>Project Garage ✕ Welcome ✕</span><span>Project Garage ✕ Welcome ✕</span></div>
+      <div class="bg-marquee-row"><span>Project Garage ✕ Welcome ✕</span><span>Project Garage ✕ Welcome ✕</span></div>
     </div>
     <div class="page-loader" aria-hidden="true">
       <div class="loader-bars">
@@ -211,7 +211,7 @@
     <main>
       <div class="intro">
         <h1>Project<br>garage.</h1>
-        <p>The full lineup â€” school builds, freelance work, and a couple of just-for-fun experiments. Click any card for a closer look.</p>
+        <p>The full lineup — school builds, freelance work, and a couple of just-for-fun experiments. Click any card for a closer look.</p>
       </div>
 
       <div class="section-label">
@@ -226,7 +226,7 @@
             <div class="plaque-left">
               <span class="num">No. 01</span>
               <h3>StayHub</h3>
-              <p class="blurb">School project â€” assigns rooms, bills tenants, and handles complaints, room, ID, and password change requests.</p>
+              <p class="blurb">School project — assigns rooms, bills tenants, and handles complaints, room, ID, and password change requests.</p>
             </div>
             <span class="tag">Live demo</span>
           </div>
@@ -256,13 +256,13 @@
           </div>
         </article>
 
-        <article class="proj-card" data-title="Sambalikha Art Gallery" data-img="finals2ndYear/welcome.png" data-url="finals2ndYear/homepage.html" data-description="An online gallery and cafe â€” browse current exhibits, painting prices, and artist profiles.">
+        <article class="proj-card" data-title="Sambalikha Art Gallery" data-img="finals2ndYear/welcome.png" data-url="finals2ndYear/homepage.html" data-description="An online gallery and cafe — browse current exhibits, painting prices, and artist profiles.">
           <div class="frame"><img src="finals2ndYear/welcome.png" alt="Sambalikha Art Gallery preview"></div>
           <div class="plaque">
             <div class="plaque-left">
               <span class="num">No. 04</span>
               <h3>Sambalikha Art Gallery</h3>
-              <p class="blurb">A gallery-slash-cafe site â€” see what's on exhibit, painting prices, and visit each artist's page.</p>
+              <p class="blurb">A gallery-slash-cafe site — see what's on exhibit, painting prices, and visit each artist's page.</p>
             </div>
             <span class="tag">Live demo</span>
           </div>
@@ -274,7 +274,7 @@
             <div class="plaque-left">
               <span class="num">No. 05</span>
               <h3>Sett's Portfolio</h3>
-              <p class="blurb">A personal site built for my cousin â€” his artwork, background, and a way to get in touch.</p>
+              <p class="blurb">A personal site built for my cousin — his artwork, background, and a way to get in touch.</p>
             </div>
             <span class="tag">Concept</span>
           </div>
@@ -304,12 +304,12 @@
 
     <div class="modal" id="modal" aria-hidden="true">
       <article class="modal-card">
-        <button class="close" type="button">Close Ã—</button>
+        <button class="close" type="button">Close ×</button>
         <p class="mono">Project preview</p>
         <h2 id="modal-title">Project</h2>
         <p id="modal-description">Project description.</p>
         <p id="modal-status" class="mono" hidden></p>
-        <a id="modal-live-link" class="modal-live-link" href="" target="_blank" rel="noreferrer" hidden>Open full project â†—</a>
+        <a id="modal-live-link" class="modal-live-link" href="" target="_blank" rel="noreferrer" hidden>Open full project ↗</a>
         <iframe id="project-frame" class="project-frame" title="Project simulation" hidden></iframe>
         <img id="modal-image" src="" alt="Project preview">
       </article>
