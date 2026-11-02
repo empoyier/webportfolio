@@ -793,6 +793,8 @@
       max-height:90vh;
       padding:40px;
       overflow:auto;
+      overscroll-behavior:contain;
+      -webkit-overflow-scrolling:touch;
       scrollbar-width:none;
       -ms-overflow-style:none;
       color:var(--ink);
@@ -1163,7 +1165,7 @@
           </section>
         </main>
         <div class="modal" id="modal" aria-hidden="true"> 
-          <article class="modal-card">
+          <article class="modal-card" data-lenis-prevent>
             <button class="close" type="button">Close ×</button>
             <p class="mono">Project preview</p>
             <h2 id="modal-title">Project</h2>

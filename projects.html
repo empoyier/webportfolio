@@ -122,7 +122,7 @@
 
       .modal { position:fixed; z-index:40; inset:0; display:none; place-items:center; background:rgba(0,0,0,.8); padding:12px; }
       .modal.active { display:grid; }
-      .modal-card { position:relative; width:min(1100px,100%); max-height:94vh; padding:40px; overflow:auto; scrollbar-width:none; -ms-overflow-style:none; color:var(--red); background:var(--ink); border:1px solid rgba(226,27,35,.2); border-radius:3px; }
+      .modal-card { position:relative; width:min(1100px,100%); max-height:94vh; padding:40px; overflow:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; scrollbar-width:none; -ms-overflow-style:none; color:var(--red); background:var(--ink); border:1px solid rgba(226,27,35,.2); border-radius:3px; }
       .modal-card::-webkit-scrollbar { display:none; }
       .modal-card h2 { margin:0 0 14px; font:clamp(46px,8vw,100px)/.8 Anton,Impact,sans-serif; text-transform:uppercase; color:var(--red); }
       .modal-card p { max-width:580px; line-height:1.6; }
@@ -362,7 +362,7 @@
     </footer>
 
     <div class="modal" id="modal" aria-hidden="true">
-      <article class="modal-card">
+      <article class="modal-card" data-lenis-prevent>
         <button class="close" type="button">Close ×</button>
         <p class="mono">Project preview</p>
         <h2 id="modal-title">Project</h2>
